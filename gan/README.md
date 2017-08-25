@@ -18,93 +18,93 @@ Table of Contents
       * [Submission](#submission)
  
 # Generative Adversarial Networks
-In this problem, you will attempt to train [GAN (Generative Adversarial Networks)](https://arxiv.org/abs/1701.00160).
-GAN consists of two networks - Generator and Discriminator. With given dataset of human face pictures, you will be asked to train those two networks.
+본 문제는 [GAN (Generative Adversarial Networks)](https://arxiv.org/abs/1701.00160)을 훈련시켜 보는 문제입니다.
+GAN은 Generator과 Discriminator 두 개의 네트워크로 구성되어 있습니다. 여러분은 주어진 사람 얼굴 데이터를 사용하여 두 네트워크를 훈련하시면 됩니다.
 
-- Generator : generates an image similar to the human face photos from given dataset.
-- Discriminator : judges an image whether it is a generated one or a real one from given dataset.
+- Generator : 주어진 데이터셋에 기반하여 사람 얼굴과 비슷한 그림 파일을 생성하는 네트워크.
+- Discriminator : 이미지가 Generator에서 생성된 이미지인지 데이터셋에서 나온 진짜 사진인지를 판단하는 네트워크.
 
-After the training phase, you will battle with other participants, with your 2 models!
+훈련이 모두 종료된 후, 여러분은 여러분의 모델을 가지고 다른 참가자들의 모델과 경합을 벌일 예정입니다!
 
 ## Objectives
-Below is the brief workflow.
+대략적인 흐름은 다음과 같습니다:
 ![workflow](pics/workflow.png)
-- Training phase : you have to train your generator / discriminator models using skeleton code and Google Cloud platform if needed
-- Battle phase : based on submitted models, we will process each battle and show you the result.
+- Training phase : 주어진 스켈레톤 코드와, 필요하다면 Google Cloud Platform을 이용하여 여러분만의 Generator / Discriminator를 훈련하는 단계.
+- Battle phase : 제출된 모델들은 대회 시스템의 규칙에 따라 모델간 경쟁을 벌이며 이를 확인하는 단계.
 
 ### Battle Rules
-We will hold a single-elimination tournament for 16 teams. Battles will be processed by us based on your submitted models in Google Cloud, and the result will be shown in the front screen.
+단판승제 토너먼트 대회를 진행할 계획입니다. 각각의 경기는 Google Cloud에 제출된 모델들을 선수로 하여 운영팀에 의하여 진행되며 과정 및 결과는 전방의 스크린을 통해 함께 지켜보실 수 있습니다.
 
 Let's say team A and team B battle each other.
-1. A's generator generates N images, and mix with (30-N) real images from the test dataset. Team A can decide the value N before battle, as a strategy. But N should be in [10, 20] range in order to make the mixed images not too biased.
-2. B's discriminator sees the list of 30 images from A, and makes predictions.
-3. Comparing with ground truth, the number of correct prediction will be a B's score.
-4. After then, change the roles - now B's generator and A's discriminator do the same thing (step 1 to 3).
-5. Compare A's score and B's score, and decide a winner of current round. Winner takes 1 point. If the score is tied, both take 0.5 point.
-6. Doing step 1 to 5 is one round. We will have total 1 round for each battle until semi-final, and for final we will have total 3 rounds.
-7. After finishing all rounds, decide a winner. If score is tied, compare the sum of the number of right predictions among rounds.
+팀 A와 팀 B가 경기를 한다고 할 때, 과정은 다음과 같습니다:
+1. A의 Generator은 N개의 이미지를 생성하고, 30 - N개의 실제 이미지를 테스트 데이터셋에서 가져옵니다. A는 N을 전투 전에 전략의 일부로써 정할 수 있으며, N은 이미지셋이 너무나 한 방향으로 치우치는 것을 방지하기 위하여 [10, 20]사이의 값이여야 합니다.
+2. B의 Discriminator은 A가 제공한 이미지를 입력받은 뒤 추측을 내놓습니다.
+3. B의 추측과 사실을 비교하여 맞은 숫자가 B의 점수가 됩니다.
+4. 이 후, A와 B의 역할을 바꾸어 B의 Generator과 A의 Discriminator가 1 ~ 3단계를 다시 진행합니다.
+5. A의 점수와 B의 점수를 비교하여 경기의 승자를 정합니다. 승자는 1 점을 가져갑니다. 비길 경우 양 팀이 0.5점씩을 가져갑니다.
+6. 1 ~ 5까지의 과정을 한 라운드라고 합니다. 준결승전까지는 각 경기는 한 라운드로 구성되며, 결승전은 3라운드로 진행됩니다.
+7. 모든 경기가 끝난 후 점수에 따라 승자를 정합니다. 동점의 경우, 경기 전반에 걸쳐 옳은 추측의 숫자가 많은 쪽이 우세합니다.
 
 
 ## Input Data Format
-Each human face image in the dataset is downsampled to 50x50 size and also converted to grayscale. Here are some samples :
+각 이미지는 50x50 사이즈로 다운샘플링 및 흑백으로 처리되어 있습니다. 예를 들자면:
 
 ![human_faces](pics/human_faces.png)
 
 
-All the data are available on Google Cloud, in following addresses :
+데이터는 다음 주소에서 접근 가능합니다:
 - Training data: gs://kmlc_test_train_bucket/gan/train.tfrecords (11901 images)
 - Validation data: gs://kmlc_test_train_bucket/gan/validation.tfrecords (689 images)
 
-Most likely you want to train your model in Google Cloud, but validation data is small enough that you may also want to run them locally.
+훈련은 Google Cloud에서 하는 것을 추천해드리나, 평가 데이터는 충분히 작기 때문에 로컬에서도 돌리실 수 있을 것이라 예상합니다.
 
-You can download all data using :
+다음 명령어를 통해서 다운받으실 수 있습니다:
 ```
 gsutil cp -r gs://kmlc_test_train_bucket/gan/train.tfrecords ./
 gsutil cp -r gs://kmlc_test_train_bucket/gan/validation.tfrecords ./
 ```
 
-Training data and cross validation data share the same format, where each records consists of only one feature:
-- image_raw: a int64 list feature that stores the value of each pixel (0 to 255). It's a one-dimensional list of flattened 50x50 image.
+훈련 데이터 및 교차평가 데이터는 같은 형식으로 저장되어 있으며, 각각의 레코드는 한 피쳐만을 가지고 있습니다:
+- image_raw: int64 리스트 피쳐로, 각 픽셀의 값(0 - 255)를 띄고 있습니다. 본 리스트는 50x50 이미지를 1차원으로 펼친 값입니다.
 
-Test data (which has 624 images) will not be provided, since it will be used for battle after training.
+테스트 데이터(624개 이미지)는 제공되지 않으며, 이는 추후 경기에 이용될 예정입니다.
 
-
-Also, MNIST data is available on Google Cloud in the same place with [MNIST tutorial](https://github.com/machine-learning-challenge/tutorial_mnist/tree/master/mnist) we provided. The source code supports to test with MNIST, to help validating your model and training logic. See [Training Locally with MNIST](#training-locally-with-mnist) for testing your model with MNIST dataset.
+또한, 튜토리얼을 위해 제공해 드렸던 [MNIST tutorial](https://github.com/machine-learning-challenge/tutorial_mnist/tree/master/mnist) 및 데이터가 아직 유효합니다. 본 소스 코드는 MNIST 데이터상에서 훈련을 지원하며, 필요하시다면 이를 통해 모델 훈련 및 평가에 도움을 받으실 수도 있습니다. 좀 더 자세한 내용은 [Training Locally with MNIST](#training-locally-with-mnist) 를 참고해주세요.
 ```
 gsutil cp -r gs://kmlc_test_train_bucket/mnist ./
 ```
 
 ## What you need to do
-* This repository provides a skeleton code which implements very basic structure of GAN. If you run train.py directly without any modification on this repository, generated images after training will be like this (a bit scary though) :
+* 본 저장소는 GAN의 기본적인 구조를 구현한 뼈대 코드를 제공합니다. 만약 본 저장소의 train.py를 그대로 실행하신다면 다음과 같은 이미지를 생성하실 수 있습니다(좀 무서워요...) :
 
 ![generated faces](pics/generated_faces.png)
 
-* You have to modify some part of code to improve this model.
-* Create your own models (generator, discriminator) which extends BaseModel in *models.py*. You can also modify BaseModel as you wish.
-* Create your own class which extends BaseLoss and implements calculate_loss in *losses.py*, which fits with your models.
-* Adjust the training logic in *train.py*, if needed.
-* IMPORTANT - If you need any preprocessing/resizing on data, please do it in *models.py*, not in *readers.py*. We will run your trained models based on the checkpoint files, and the shape of input tensor should be matched with the spec.
-
+* 여러분은 본 코드를 수정하셔서 모델의 성능을 향상시키셔야 합니다.
+* *models.py*에서 BaseModel을 상속하여 여러분의 (generator, discriminator)을 만드세요. 원하시면 BaseModel역시 수정하셔도 됩니다.
+* *losses.py*에서 BaseLoss를 상속하여 여러분의 모델에 잘 맞는 로스 함수 calculate_loss를 만들어주세요.
+* 필요하다면 *train.py*에서 훈련 로직을 변경해주세요.
+* *중요* - 만약 데이터를 전처리/리사이징하시려면 *readers.py*가 아닌 *models.py*안에서 해 주시기 바랍니다. 운영측은 체크포인트 파일에 의거하여 여러분의 모델을 실행하게 되며, 입력 텐서 및 출력 텐서의 형태는 아래 Spec과 같아야 합니다.
 
 ## Spec
-* In battle, we will use your trained model from the checkpoint file (saved by tf.train.Saver) in the Google Cloud bucket. Each team will have unique bucket for submitting. See [Submission](#submission) part for details.
-  * Note that the logic of saving model is already implemented in the skeleton code, so don't worry.
-* For generating various images, generator model should use the predefined random noise signal as its input (also called "latent vector"). 
-  * *random_noise_generator.py* will be used as the input of generator model, for consistency.
-  * It has 100 float numbers which are randomly generated by uniform random between [-1, 1].
-* For simplicity, both generator and discriminator should be in the same checkpoint file. The default graph in the checkpoint file should contain all of following tensors as collections added by tf.add_to_collection(), with correct collection name :
+* 경기에서 운영측은 Google Cloud 버킷에 저장된 체크포인트 파일(tf.train.Saver에 의하여 저장됨)으로부터 참가자의 훈련된 모델을 사용합니다. 각 팀은 제출을 위한 고유한 버킷을 배정받게 됩니다. 자세한 내용은 [Submission](#submission)을 참고해주세요.
+  * 모델을 저장하기 위한 로직은 뼈대 코드에 이미 구현되어 있으니 걱정하지 마세요!
+* 다양한 이미지를 생성하기 위해 Generator 모델은 랜덤한 노이즈 신호를 입력으로 받게 됩니다("latent vector"라고도 부릅니다).
+  * 일관성을 위하여 Generator 모델의 입력으로는 *random_noise_generator.py* 가 쓰이게 됩니다.
+  * 이는 [-1, 1] 안에서 고른 분포로 생성되는 랜덤한 실수 100개를 담고 있습니다.
+* Generator과 Discriminator은 같은 체크포인트 파일 안에 있어야 합니다. 체크포인트 파일 내의 기본 그래프는 다음의 모든 텐서를 tf.add_to_collection()을 통해서 추가되는 collection으로, 올바른 이름과 함께 포함하고 있어야 합니다:
   * **"noise_input_placeholder"** : placeholder tensor with *[None, 100]* shape, which is for putting the noise input (latent vector) to generator model. Again, *random_noise_generator.py* will be used for this input.
   * **"generated_images"** : tensor with *[None, 2500]* shape, which will hold the generated 50x50 images from generator model, with flattened shape. The value of each pixel should be a float between [0, 1], where 0 represents black and 1 indicates white.
   * **"input_batch_raw"** : placeholder tensor with *[None, 2500]* shape, which is for putting the flattened 50x50 image data to discriminator model as an input. The value of each pixel should be a float between [0, 1], where 0 represents black and 1 indicates white.
   * **"p_for_data"** : tensor with *[None, 1]* shape, which will hold the prediction results of "input_batch_raw", computed by discriminator model. Each prediction value is a float between [0, 1] range - 0 means fake image and 1 means real image.
-  * Note that the skeleton code already meets those spec.
-* DO NOT make generator just memorizing the image from training data and outputting one of them - we can examine it on submitted models.
-* Also for fairness, DO NOT make discriminator that doesn't use the training logic of GAN - e.g. separately trained SVM discriminator (without using generator) is prohibited.
+  * 주어진 뼈대 코드는 이미 위 Spec을 만족시키고 있습니다.
+* 본 행사의 참가자들은 GAN 구조에 기반하여 모델을 훈련하고 그 안에서 경기를 위한 강한 모델을 생성하여 해당 모델로 하여금 경기에 참여해주시기를 기대하고 있습니다. 따라서 GAN 구조가 아닌 방법의 훈련은 금지하고 있습니다. 예를 들면 다음과 같은 행동은 금지됩니다:
+  * 훈련 데이터의 이미지를 기억하여 그대로 출력하거나 이에 준하는 행위.
+  * GAN 구조에 의한 훈련이 아닌 방법으로, Generator을 사용하지 않고 Discriminator을 생성하는 행위 등.
 
 ## Running Code in Google Cloud
-Consider the size of training data, most likely you want to train in Google Cloud. Replace --generator_model and --discriminator_model with your model name and modify the directory paths accordingly.
+훈련 데이터의 크기를 고려하면, 훈련은 Google Cloud를 사용하여 진행하시기를 추천해드립니다. --generator_model과 --discriminator_model을 여러분의 모델 이름으로 변경하고 경로 역시 알맞게 변경해주세요.
 
-All gcloud commands should be done from the directory *immediately above* the source code. You should be able to see the source code directory if you run 'ls'.
+모든 gloucd 명령어는 저장소 루트에서 실행되어야 합니다. 
 
 ### Training in Cloud
 ```
@@ -122,7 +122,7 @@ submit training $JOB_NAME \
 --train_dir=$BUCKET_NAME/kmlc_gan_train --num_epochs=50 --start_new_model
 ```
 
-You can use tensorboard to check the performance visually. Change the value of --export_model_steps flag in train.py to adjust the period of leaving summaries to tensorboard.
+또한 tensorboard를 통해 퍼포먼스를 시각화하여 보실 수 있습니다. train.py의 --export_model_steps 플래그를 변경하여 tensorboard에 기록을 남기는 기간을 조절할 수 있습니다.
 ```
 tensorboard --logdir=$BUCKET_NAME/kmlc_gan_train --port=8080
 ```
@@ -142,10 +142,9 @@ submit training $JOB_NAME \
 
 ## Running Code Locally
 
-As you are developing your own models, you will want to test them quickly to flush out simple problems without having to submit them to the cloud.
+모델을 개발하시던 중 작은 문제들을 해결하기 위해서 Cloud에 제출하지 않고 로컬에서 빠르게 테스트해볼 수 있습니다.
 
-All gcloud commands should be done from the directory *immediately above* the source code. You should be able to see the source code directory if you run 'ls'.
-
+모든 gloucd 명령어는 저장소 루트에서 실행되어야 합니다. 
 ### Training Locally
 ```
 gcloud ml-engine local train --package-path=gan --module-name=gan.train -- \
@@ -155,7 +154,7 @@ gcloud ml-engine local train --package-path=gan --module-name=gan.train -- \
 ```
 
 ### Evaluation Using Validation
-You can evaluate and test your model using the cross validation data.
+교차검증 데이터를 이용하여 여러분의 모델을 평가해볼 수 있습니다.
 ```
 gcloud ml-engine local train --package-path=gan --module-name=gan.eval -- \
 --eval_data_pattern='VALIDATION_DATA_FILE' \
@@ -164,25 +163,25 @@ gcloud ml-engine local train --package-path=gan --module-name=gan.eval -- \
 ```
 
 ### Training Locally with MNIST
-You can also use MNIST data as a simple test whether your model's training logic is valid. 
-Adding --use_mnist=True will change the reader accordingly, and also adding --export_generated_images=True will export samples of generated images as png file in 'out/' directory (it requires installing [matplotlib](https://matplotlib.org)). 
+여러분은 MNIST 데이터를 이용하여 여러분의 모델이 훈련 로직이 잘 동작하는지를 간단하게 살펴볼 수 있습니다.
+--use_mnist=True 플래그를 설정하면 reader가 알맞게 변경되며, --export_generated_images=True 플래그를 설정할 시 생성된 이미지의 예시를 png 파일의 형태로 'out/' 디렉토리에 저장됩니다.([matplotlib](https://matplotlib.org)가 필요합니다.)
 
 ```
 python train.py --train_data_pattern='MNIST_TRAINING_DATA_FILE' \
 --train_dir=/tmp/kmlc_gan_train_mnist --export_generated_images=True --use_mnist=True \
 --generator_model=SampleGenerator --discriminator_model=SampleDiscriminator --start_new_model 
 ```
-Here is the sample of generated MNIST images using the skeleton code without any modification :
+다음은 주어진 뼈대코드를 그대로 이용하여 MNIST를 생성해본 결과입니다:
 
 ![generated mnist](pics/generated_mnist.png)
 
 
 ## Submission
-We will provide a unique Google Cloud bucket for each team, starts with "gs://...".
-  * You should move the checkpoint files that contains trained models into **"gs://[BUCKET NAME]/model"** directory, using "gsutil cp" command. Or, you can train your models using that place directly.
-  * Also you have to submit your whole source code to **"gs://[BUCKET NAME]/source"** directory, using "gsutil cp" command.
+각 팀마다 제출을 위한 고유한 Google Cloud 버킷이 제공될 예정입니다.
+  * 여러분은 훈련된 모델을 포함한 체크포인트 파일들을 "gsutil cp" 명령어를 사용하여 **"gs://[BUCKET NAME]/model"** 디렉토리로 옮겨야 합니다. 혹은 해당 경로에서 직접 모델들을 훈련하셔도 됩니다.
+  * 또한 여러분은 전 소스코드를 "gsutil cp"명령어를 사용하여 **"gs://[BUCKET NAME]/source"** 디렉토리에 제출하셔야 합니다.
 
-To check your submission is valid and the checkpoint meets the [Spec](#spec), you can run *generate_and_discriminate.py* with setting both --G_train_dir and --D_train_dir with your team's bucket address, like following command :
+여러분의 제출이 유효한지, 체크포인트 파일이 [Spec](#spec)을 만족하는지를 확인하기 위해서 --G_train_dir과 --D_train_dir을 여러분 팀의 버킷 주소로 설정한 뒤 *generate_and_discriminate.py* 스크립트를 실행해보시기 바랍니다. 예시는 다음과 같습니다:
 
 ```
 BUCKET_NAME=gs://[TEAM BUCKET ADDRESS]
@@ -195,5 +194,5 @@ submit training $JOB_NAME \
 --input_data_pattern='gs://kmlc_test_train_bucket/gan/validation.tfrecords' \
 --num_generate=50 --output_dir=$BUCKET_NAME/results/
 ```
-This will output the results (images, ground_truth.csv, predictions.csv) into results/ directory in the bucket. If you can see those outputs without any error, your submission is valid.
-Note that we will use this script to process all battles, so please make sure that this script works for your submitted models.
+위 명령은 결과(images, ground_truth.csv, predictions.csv)를 버킷 내 results/ 디렉토리에 저장합니다. 만약 별다른 에러 없이 해당 출력 파일들을 볼 수 있다면 여러분의 제출은 유효합니다.
+본 경기는 매뉴얼이 아닌 스크립트로 진행됨으로, 여러분의 모델이 경기에 정상적으로 참여할 수 있도록 꼭 확인해주세요!
