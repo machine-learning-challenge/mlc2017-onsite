@@ -36,13 +36,13 @@ Below is the brief workflow.
 We will hold a single-elimination tournament for 16 teams. Battles will be processed by us based on your submitted models in Google Cloud, and the result will be shown in the front screen.
 
 Let's say team A and team B battle each other.
-1. A's generator generates N images, and mix with (30-N) real images from the test dataset. Team A can decide the value N before battle, as a strategy. But N should be in [10, 20] range in order to make the mixed images not too biased.
+1. A's generator generates 15 images, and mix with 15 real images from the test dataset.
 2. B's discriminator sees the list of 30 images from A, and makes predictions.
 3. Comparing with ground truth, the number of correct prediction will be a B's score.
 4. After then, change the roles - now B's generator and A's discriminator do the same thing (step 1 to 3).
-5. Compare A's score and B's score, and decide a winner of current round. Winner takes 1 point. If the score is tied, both take 0.5 point.
+5. Compare A's score and B's score, and decide a winner of current round.
 6. Doing step 1 to 5 is one round. We will have total 1 round for each battle until semi-final, and for final we will have total 3 rounds.
-7. After finishing all rounds, decide a winner. If score is tied, compare the sum of the number of right predictions among rounds.
+7. After finishing all rounds, decide a winner. If score is tied, run another round. If it's still tied, the team who has less variables in the model wins.
 
 
 ## Input Data Format
@@ -100,6 +100,7 @@ gsutil cp -r gs://kmlc_test_train_bucket/mnist ./
   * Note that the skeleton code already meets those spec.
 * DO NOT make generator just memorizing the image from training data and outputting one of them - we can examine it on submitted models.
 * Also for fairness, DO NOT make discriminator that doesn't use the training logic of GAN - e.g. separately trained SVM discriminator (without using generator) is prohibited.
+* It is prohibited to use external data.
 
 ## Running Code in Google Cloud
 Consider the size of training data, most likely you want to train in Google Cloud. Replace --generator_model and --discriminator_model with your model name and modify the directory paths accordingly.
@@ -197,3 +198,7 @@ submit training $JOB_NAME \
 ```
 This will output the results (images, ground_truth.csv, predictions.csv) into results/ directory in the bucket. If you can see those outputs without any error, your submission is valid.
 Note that we will use this script to process all battles, so please make sure that this script works for your submitted models.
+
+### Mock Battles
+We're going to have mock battles during training phase.
+Team who want to test the model, submit the checkpoint files to "gs://[BUCKET NAME]/model". We will process the battle and let you know the result. We will start the first mock battle at 12:00, and every 2 hours after then.
