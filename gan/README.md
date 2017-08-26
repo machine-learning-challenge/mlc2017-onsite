@@ -105,7 +105,7 @@ gsutil cp -r gs://kmlc_test_train_bucket/mnist ./
 ## Running Code in Google Cloud
 훈련 데이터의 크기를 고려하면, 훈련은 Google Cloud를 사용하여 진행하시기를 추천해드립니다. --generator_model과 --discriminator_model을 여러분의 모델 이름으로 변경하고 경로 역시 알맞게 변경해주세요.
 
-모든 gloucd 명령어는 저장소 루트에서 실행되어야 합니다. 
+모든 gcloud 명령어는 저장소 루트에서 실행되어야 합니다. 
 
 ### Training in Cloud
 ```
@@ -123,7 +123,7 @@ submit training $JOB_NAME \
 --train_dir=$BUCKET_NAME/kmlc_gan_train --num_epochs=50 --start_new_model
 ```
 
-또한 tensorboard를 통해 퍼포먼스를 시각화하여 보실 수 있습니다. train.py의 --export_model_steps 플래그를 변경하여 tensorboard에 기록을 남기는 기간을 조절할 수 있습니다.
+또한 tensorboard를 통해 퍼포먼스를 시각화하여 보실 수 있습니다. train.py의 --export_model_steps 플래그를 변경하여 모델 저장 기간 및 tensorboard에 기록을 남기는 기간을 조절할 수 있습니다.
 ```
 tensorboard --logdir=$BUCKET_NAME/kmlc_gan_train --port=8080
 ```
