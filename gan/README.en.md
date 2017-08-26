@@ -42,11 +42,12 @@ Let's say team A and team B battle each other.
 4. After then, change the roles - now B's generator and A's discriminator do the same thing (step 1 to 3).
 5. Compare A's score and B's score, and decide a winner of current round.
 6. Doing step 1 to 5 is one round. We will have total 1 round for each battle until semi-final, and for final we will have total 3 rounds.
-7. After finishing all rounds, decide a winner. If score is tied, run another round. If it's still tied, the team who has less variables in the model wins.
+7. After finishing all rounds, decide a winner. If score is tied, the team who has less total running time (running generator/discriminator) wins.
 
 
 ## Input Data Format
-Each human face image in the dataset is downsampled to 50x50 size and also converted to grayscale. Here are some samples :
+Each human face image in the dataset is downsampled to 50x50 size and also converted to grayscale. The data is from [labeled faces in the wild](http://vis-www.cs.umass.edu/lfw/).
+Here are some samples :
 
 ![human_faces](pics/human_faces.png)
 
