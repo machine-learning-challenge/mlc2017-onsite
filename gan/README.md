@@ -193,7 +193,7 @@ submit training $JOB_NAME \
 --config=gan/cloudml-gpu.yaml \
 -- --G_train_dir=$BUCKET_NAME/model --D_train_dir=$BUCKET_NAME/model \
 --input_data_pattern='gs://kmlc_test_train_bucket/gan/validation.tfrecords' \
---num_generate=50 --output_dir=$BUCKET_NAME/results/
+--num_generate=50 --output_dir=[BUCKET of yours]/results/
 ```
 위 명령은 결과(images, ground_truth.csv, predictions.csv)를 버킷 내 results/ 디렉토리에 저장합니다. 만약 별다른 에러 없이 해당 출력 파일들을 볼 수 있다면 여러분의 제출은 유효합니다.
 본 경기는 매뉴얼이 아닌 스크립트로 진행됨으로, 여러분의 모델이 경기에 정상적으로 참여할 수 있도록 꼭 확인해주세요!
