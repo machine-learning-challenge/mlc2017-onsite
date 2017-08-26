@@ -47,7 +47,7 @@ Let's say team A and team B battle each other.
 
 
 ## Input Data Format
-각 이미지는 50x50 사이즈로 다운샘플링 및 흑백으로 처리되어 있습니다. 예를 들자면:
+모든 이미지는 [labeled faces in the wild](http://vis-www.cs.umass.edu/lfw/) 데이터셋에서 가져왔습니다. 각 이미지는 50x50 사이즈로 다운샘플링 및 흑백으로 처리되어 있습니다. 예를 들자면:
 
 ![human_faces](pics/human_faces.png)
 
