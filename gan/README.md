@@ -43,7 +43,7 @@ Let's say team A and team B battle each other.
 4. 이 후, A와 B의 역할을 바꾸어 B의 Generator과 A의 Discriminator가 1 ~ 3단계를 다시 진행합니다.
 5. A의 점수와 B의 점수를 비교하여 경기의 승자를 정합니다.
 6. 1 ~ 5까지의 과정을 한 라운드라고 합니다. 준결승전까지는 각 경기는 한 라운드로 구성되며, 결승전은 3라운드로 진행됩니다.
-7. 모든 경기가 끝난 후 점수에 따라 승자를 정합니다. 동점의 경우, 연장 라운드를 1번 더 진행합니다. 또 동점일 경우 모델 내의 variable 수가 적은 팀이 승자가 됩니다.
+7. 모든 경기가 끝난 후 점수에 따라 승자를 정합니다. 동점의 경우, Generator / Discriminator 실행에 걸린 시간의 합이 적은 쪽이 승리합니다.
 
 
 ## Input Data Format
