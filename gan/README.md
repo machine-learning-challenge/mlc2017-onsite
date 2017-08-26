@@ -92,10 +92,10 @@ gsutil cp -r gs://kmlc_test_train_bucket/mnist ./
   * 일관성을 위하여 Generator 모델의 입력으로는 *random_noise_generator.py* 가 쓰이게 됩니다.
   * 이는 [-1, 1] 안에서 고른 분포로 생성되는 랜덤한 실수 100개를 담고 있습니다.
 * Generator과 Discriminator은 같은 체크포인트 파일 안에 있어야 합니다. 체크포인트 파일 내의 기본 그래프는 다음의 모든 텐서를 tf.add_to_collection()을 통해서 추가되는 collection으로, 올바른 이름과 함께 포함하고 있어야 합니다:
-  * **"noise_input_placeholder"** : placeholder tensor with *[None, 100]* shape, which is for putting the noise input (latent vector) to generator model. Again, *random_noise_generator.py* will be used for this input.
-  * **"generated_images"** : tensor with *[None, 2500]* shape, which will hold the generated 50x50 images from generator model, with flattened shape. The value of each pixel should be a float between [0, 1], where 0 represents black and 1 indicates white.
-  * **"input_batch_raw"** : placeholder tensor with *[None, 2500]* shape, which is for putting the flattened 50x50 image data to discriminator model as an input. The value of each pixel should be a float between [0, 1], where 0 represents black and 1 indicates white.
-  * **"p_for_data"** : tensor with *[None, 1]* shape, which will hold the prediction results of "input_batch_raw", computed by discriminator model. Each prediction value is a float between [0, 1] range - 0 means fake image and 1 means real image.
+  * **"noise_input_placeholder"** : *[None, 100]* shape의 placeholder tensor로, generator에 noise input (latent vector)를 입력할 때 사용합니다. 여기엔 항상 random_noise_generator.py가 사용될 것입니다.
+  * **"generated_images"** : *[None, 2500]* shape의 tensor로 generator에서 나온 결과인 50x50 이미지를 1차원으로 펼친 형태로 갖고 있습니다. 각 픽셀은 [0, 1] 사이의 float 값으로, 0은 검은색 1은 흰색입니다.
+  * **"input_batch_raw"** : [*None, 2500]* shape의 placeholder tensor로, discriminator에 이미지를 입력할 때 사용합니다. 50x50 이미지의 정보를 1차원으로 펼친 형태로 입력하며, 각 픽셀은 [0, 1] 사이의 float 값을 가지고 0은 검은색 1은 흰색 입니다.
+  * **"p_for_data"** : *[None, 1]* shape의 float tensor로, discriminator의 "input_batch_raw" 입력에 대한 결과값을 출력합니다. 각 예측값은 [0, 1] 사이의 확률로 나타내어지며, 0은 해당 이미지를 가짜라고 예측한 것이고 1은 해당 이미지를 진짜라고 예측한 것입니다. 실제로 판정할 때는 값이 0.5보다 큰지 작은지에 따라 판단합니다.
   * 주어진 뼈대 코드는 이미 위 Spec을 만족시키고 있습니다.
 * 본 행사의 참가자들은 GAN 구조에 기반하여 모델을 훈련하고 그 안에서 경기를 위한 강한 모델을 생성하여 해당 모델로 하여금 경기에 참여해주시기를 기대하고 있습니다. 따라서 GAN 구조가 아닌 방법의 훈련은 금지하고 있습니다. 예를 들면 다음과 같은 행동은 금지됩니다:
   * 훈련 데이터의 이미지를 기억하여 그대로 출력하거나 이에 준하는 행위.
