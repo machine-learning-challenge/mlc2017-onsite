@@ -178,7 +178,7 @@ python train.py --train_data_pattern='MNIST_TRAINING_DATA_FILE' \
 
 
 ## Submission
-각 팀마다 제출을 위한 고유한 Google Cloud 버킷이 제공될 예정입니다. [Form](https://goo.gl/Y4njto)을 작성해 주세요. 
+각 팀마다 제출을 위한 고유한 Google Cloud 버킷이 제공될 예정입니다. 리스트는 [여기](https://docs.google.com/spreadsheets/d/1sRVB1kD_OzyOFaN4oJDW-UiS4JDF7u6_tWiZt2Xvecw/edit?usp=sharing)에서 볼 수 있습니다. Admin 권한을 얻기 위해 꼭 [Form](https://goo.gl/Y4njto)을 작성해 주세요. 
   * 여러분은 훈련된 모델을 포함한 체크포인트 파일들을 "gsutil cp" 명령어를 사용하여 **"gs://[BUCKET NAME]/model"** 디렉토리로 옮겨야 합니다. 혹은 해당 경로에서 직접 모델들을 훈련하셔도 됩니다.
   * 또한 여러분은 전 소스코드를 "gsutil cp"명령어를 사용하여 **"gs://[BUCKET NAME]/source"** 디렉토리에 제출하셔야 합니다.
 
